@@ -1,17 +1,16 @@
 import {fork, take, all, throttle} from 'redux-saga/effects';
 import {REHYDRATE, PURGE} from 'redux-persist/lib/constants';
 import {
-    triggerStartGetUsers,
     triggerStartGetUser,
     triggerDisableBootStrapped,
     triggerEnableBootStrapped,
-    triggerGetTranslations, triggerChangeLang
+    triggerGetTranslations, triggerChangeLang, triggerLogout
 } from "./triggers";
 
 export default function* rootSaga() {
     yield all([
-        fork(triggerStartGetUsers),
         fork(triggerStartGetUser),
+        fork(triggerLogout),
         fork(triggerDisableBootStrapped),
         fork(triggerEnableBootStrapped),
         fork(triggerGetTranslations),

@@ -1,21 +1,21 @@
 import {takeLatest, call, put, all, throttle} from "redux-saga/effects";
 import {
-    startGetUsersScenario,
     startGetUserScenario,
-    startEnableBootStrappedScenario, startGetTranslationsScenario, startChangeLangScenario
+    startEnableBootStrappedScenario, startGetTranslationsScenario, startChangeLangScenario, startLogoutSceanrio
 } from "./requestSagas";
-import {persist} from './../store';
+// import {persist} from './../store';
 import {bootStrappedSlice, enableBootStrapped} from "../slices/bootStrappedSlice";
-import {resetUser, resetUsers, usersSlice} from "../slices/usersSlice";
+import {authSlice} from './../slices/authSlice';
 import {localeSlice} from "../slices/localeSlice";
 import {translationsSlice}  from "../slices/translationsSlice";
 
-export function* triggerStartGetUsers() {
-    yield throttle(2000,usersSlice.actions.getUsers, startGetUsersScenario);
+export function* triggerStartGetUser() {
+    yield throttle(2000,authSlice.actions.getUser, startGetUserScenario);
+    // yield takeLatest(authSlice.actions.getUser, startGetUserScenario);
 }
 
-export function* triggerStartGetUser() {
-    yield throttle(5000,usersSlice.actions.getUser, startGetUserScenario);
+export function* triggerLogout() {
+    yield takeLatest(authSlice.actions.logout, startLogoutSceanrio);
 }
 
 export function* triggerDisableBootStrapped() {
@@ -27,10 +27,9 @@ export function* triggerEnableBootStrapped() {
 }
 
 export function* startResetScenario() {
-    persist.purge();
+    // persist.purge();
     yield all([
-        put(resetUsers({})),
-        put(resetUser({})),
+        // list of state reset
     ])
     yield put(enableBootStrapped())
 }

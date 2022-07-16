@@ -1,13 +1,12 @@
 import { combineReducers } from "@reduxjs/toolkit";
-
-import {usersSlice} from "./usersSlice";
 import {localeSlice} from "./localeSlice";
 import {translationsSlice} from "./translationsSlice";
 import {bootStrappedSlice} from "./bootStrappedSlice";
+import {authSlice} from "./authSlice";
 
 export const rootReducer = combineReducers({
-    users : usersSlice.reducer,
     locale : localeSlice.reducer,
     translations : translationsSlice.reducer,
-    bootStrapped : bootStrappedSlice.reducer
+    bootStrapped : bootStrappedSlice.reducer,
+    auth : authSlice.reducer
 });

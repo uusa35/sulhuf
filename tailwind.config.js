@@ -8,4 +8,8 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  fontFamily: {
+    'Tajawal-Light': ['Tajawal-Light', 'sans-serif'],
+    'Tajawal-Medium': ['Tajawal-Medium', 'sans-serif'],
+  },
 }

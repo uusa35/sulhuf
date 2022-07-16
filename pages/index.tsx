@@ -3,6 +3,7 @@ import React, {useContext} from "react";
 import Image  from "next/image";
 import {MainContext} from "../components/layout/MainLayout";
 import {MainContextType} from "../types";
+import {GetServerSideProps} from "next";
 
 
 const Home: NextPage = () => {
@@ -17,4 +18,10 @@ const Home: NextPage = () => {
     )
 }
 
-export default Home
+export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res}) => {
+    return {
+        props: { token : req.cookies.token || ""}
+    }
+}

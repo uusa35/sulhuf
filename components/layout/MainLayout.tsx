@@ -12,6 +12,8 @@ import {enableBootStrapped} from "../../redux/slices/bootStrappedSlice";
 import {baseUrl} from "../../pages/api";
 import MainNav from "./MainNav";
 import {ToastContainer} from "react-toastify";
+import Cookies from "js-cookie";
+import {getUser, logout} from "../../redux/slices/authSlice";
 
 
 function classNames(...classes: any) {
@@ -37,7 +39,7 @@ const MainContext = createContext<MainContextType>(contextState);
 
 
 const MainLayout = ({children}: MainLayoutProps) => {
-    const {locale, translations, bootStrapped} = useAppSelector(state => state);
+    const {locale, translations, bootStrapped, auth } = useAppSelector(state => state);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -57,13 +59,24 @@ const MainLayout = ({children}: MainLayoutProps) => {
         getFileUrl: (element: string) => `${baseUrl}files/${element}`,
     }
 
+    const handleLogin = async () => {
+        if(!Cookies.get('auth')) {
+            dispatch(logout({}))
+        } else {
+            dispatch(getUser('fakeUserName', 'fakePassword'))
+        }
+    }
+    useEffect(() => {
+        handleLogin()
+    }, [auth.isLogged])
+
     return (
         <MainContext.Provider value={context}>
             <Head>
                 <title>Sulhuf</title>
                 <link rel="icon" href="/sulhuf.png"/>
             </Head>
-            <div className="h-screen w-full" dir={locale.isRTL ? 'rtl' : 'ltr'}>
+            <div className="h-screen w-full font-tajwal-medium capitalize" dir={locale.isRTL ? 'rtl' : 'ltr'}>
                 <MainNav />
 
                 <div className="py-10">

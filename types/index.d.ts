@@ -40,3 +40,12 @@ export type MainContextType = {
     classNames: (classes: any) => any;
 }
 
+export type Auth = {
+    id? : string | number | undefined;
+    email? : string;
+    username : string;
+    password?: string|number;
+    token? : string | number;
+    isLogged : boolean
+}
+

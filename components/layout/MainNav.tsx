@@ -8,10 +8,11 @@ import { MainContextType} from "../../types";
 import { MainContext} from './MainLayout';
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {getUser, logout} from "../../redux/slices/authSlice";
 
 const MainNav = () => {
     const { classNames, trans  } = useContext<MainContextType>(MainContext)
-    const { locale } = useAppSelector(state => state);
+    const { locale , auth } = useAppSelector(state => state);
     const { asPath } = useRouter();
     const dispatch = useAppDispatch();
     return (
@@ -44,23 +45,38 @@ const MainNav = () => {
                                             {trans('home')}
                                         </div>
                                     </Link>
-                                    <Link
-                                        href={`/login`} as={`login`}>
-                                        <div
-                                            className={classNames(
-                                                asPath === `/login`
-                                                    ? 'border-indigo-500 text-gray-900'
-                                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                                                'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium mx-4'
-                                            )}
-                                        >
-                                            {trans('login')}
-                                        </div>
-                                    </Link>
+                                    {
+                                        !auth.isLogged ? <Link
+                                            href={`/login`} as={`login`}>
+                                            <div
+                                                className={classNames(
+                                                    asPath === `/login`
+                                                        ? 'border-indigo-500 text-gray-900'
+                                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                                                    'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium mx-4'
+                                                )}
+                                            >
+                                                {trans('login')}
+                                            </div>
+                                        </Link> : <>
+                                            <Link href={`/item`}>
+                                            <div
+                                                className={classNames(
+                                                    asPath === `/item`
+                                                        ? 'border-indigo-500 text-gray-900'
+                                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                                                    'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium mx-4'
+                                                )}
+                                            >
+                                                {trans('products')}
+                                            </div>
+                                            </Link>
+                                        </>
+                                    }
                                     <button
                                         onClick={() => dispatch(setLocale(locale.otherLang))}
-                                            className="text-base font-medium text-gray-500 hover:text-gray-900 mx-4">
-                                        {locale.otherLang}
+                                            className="text-base font-medium text-gray-500 hover:text-gray-900 mx-4 uppercase text-sm">
+                                        {trans(locale.otherLang)}
                                     </button>
                                 </div>
                             </div>
@@ -94,13 +110,43 @@ const MainNav = () => {
                                                         onClick={() => dispatch(setLocale(locale.otherLang))}
                                                         className={classNames(
                                                             active ? 'bg-gray-100' : '',
-                                                            'block px-4 py-2 text-sm text-gray-700'
+                                                            'block px-4 py-2 text-sm text-gray-700 uppercase text-sm'
                                                         )}
                                                     >
-                                                        {locale.otherLang}
+                                                        {trans(locale.otherLang)}
                                                     </button>
                                                 )}
                                             </Menu.Item>
+                                            {
+                                                auth.isLogged ?
+                                                    <Menu.Item key={`test2`}>
+                                                        {({active}) => (
+                                                            <button
+                                                                onClick={() => dispatch(logout({}))}
+                                                                className={classNames(
+                                                                    active ? 'bg-gray-100' : '',
+                                                                    'block px-4 py-2 text-sm text-gray-700'
+                                                                )}
+                                                            >
+                                                                {trans('logout')}
+                                                            </button>
+                                                        )}
+                                                    </Menu.Item> :
+                                                    <Menu.Item key={`test2`}>
+                                                        {({active}) => (
+                                                            <Link
+                                                                href={`login`}
+                                                                className={classNames(
+                                                                    active ? 'bg-gray-100' : '',
+                                                                    'block px-4 py-2 text-sm text-gray-700'
+                                                                )}
+                                                            >
+                                                                {trans('login')}
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                            }
+
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>
@@ -176,9 +222,9 @@ const MainNav = () => {
                                 <Disclosure.Button
                                     as="a"
                                     onClick={() => dispatch(setLocale(locale.otherLang))}
-                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 uppercase text-sm"
                                 >
-                                    {locale.otherLang}
+                                    {trans(locale.otherLang)}
                                 </Disclosure.Button>
                             </div>
                         </div>
